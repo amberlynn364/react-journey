@@ -1,0 +1,22 @@
+
+.button {
+  padding: 7px 21px;
+  border-radius: 5px;
+  border-style: none;
+  box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+  background-color: #0276FF;
+  color: #fff;
+  font-size: inherit;
+  line-height: 1.15;
+  transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #1C84FF;
+}
+.button:active {
+  background-color: #006AE8;
+}
