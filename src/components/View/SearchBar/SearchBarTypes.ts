@@ -1,3 +1,5 @@
 export interface SearchBarProps {
-  defaultValue: string;
+  defaultValue?: string;
+  value?: string;
+  onChange: (value: string) => void;
 }

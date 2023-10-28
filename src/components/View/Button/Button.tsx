@@ -3,10 +3,20 @@ import styles from './Button.module.scss';
 import { ButtonProps } from './ButtonTypes';
 
 export default class Button extends Component<ButtonProps> {
+  handleButtonClick = () => {
+    const { onClick } = this.props;
+    if (onClick) onClick();
+  };
+
   render() {
-    const { children } = this.props;
+    const { children, buttonStyle } = this.props;
     return (
-      <button type="submit" className={styles.button}>
+      <button
+        type="submit"
+        className={styles.button}
+        onClick={this.handleButtonClick}
+        style={buttonStyle}
+      >
         {children}
       </button>
     );
