@@ -1,18 +1,42 @@
 import { Component } from 'react';
-import './Home.module.scss';
-import SearchData from '../../components/SearchData/SearchData';
-import DataCard from '../../components/DataCard/DataCard';
+import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
 import { HomeStates } from './HomeTypes';
+import Button from '../../components/View/Button/Button';
+import DataSection from '../../components/DataSection/DataSection';
 
-class Home extends Component {
+export default class Home extends Component {
   state: HomeStates = {
     data: null,
-    searchValue: '',
+    searchValue: localStorage.getItem('searchValue') || '',
     isLoading: false,
+    hasError: false,
   };
 
-  async componentDidMount() {
-    const apiUrl = 'https://swapi.dev/api/people/';
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  setSearchValue = (newValue: string) => {
+    this.setState({ searchValue: newValue });
+  };
+
+  sendSearchValue = async () => {
+    const { searchValue } = this.state;
+    localStorage.setItem('searchValue', searchValue);
+    this.fetchData(searchValue);
+  };
+
+  throwError = () => {
+    this.setState({ hasError: true });
+  };
+
+  async fetchData(value?: string) {
+    const { searchValue } = this.state;
+    let apiUrl = localStorage.getItem('searchValue')
+      ? `https://swapi.dev/api/people/?search=${searchValue}`
+      : 'https://swapi.dev/api/people/';
+
+    if (value) apiUrl = `https://swapi.dev/api/people/?search=${value}`;
     this.setState({ isLoading: true });
 
     try {
@@ -29,46 +53,26 @@ class Home extends Component {
     }
   }
 
-  setSearchValue = (newValue: string) => {
-    this.setState({ searchValue: newValue });
-  };
-
-  sendSearchValue = async () => {
-    const { searchValue } = this.state;
-    const searchName = searchValue;
-    const apiUrl = `https://swapi.dev/api/people/?search=${searchName}`;
-    this.setState({ isLoading: true });
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      this.setState({ isLoading: false });
-    }
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ data });
-      });
-  };
-
   render() {
-    const { data, searchValue, isLoading } = this.state;
+    const { data, searchValue, isLoading, hasError } = this.state;
+    if (hasError) throw new Error('Thrown error');
     return (
-      <div>
-        <SearchData
+      <>
+        <SearchDataSection
           searchValue={searchValue}
           setSearchValue={this.setSearchValue}
           sendSearchValue={this.sendSearchValue}
         />
-        <h1>Star Wars Characters</h1>
-        <DataCard data={data} isLoading={isLoading} />
-      </div>
+        <DataSection data={data} isLoading={isLoading} />
+        <Button
+          onClick={this.throwError}
+          buttonStyle={{
+            marginBottom: '20px',
+          }}
+        >
+          Throw error!
+        </Button>
+      </>
     );
   }
 }
-
-export default Home;
