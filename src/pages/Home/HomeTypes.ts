@@ -8,4 +8,5 @@ export interface HomeStates {
   } | null;
   searchValue: string;
   isLoading: boolean;
+  hasError: boolean;
 }
