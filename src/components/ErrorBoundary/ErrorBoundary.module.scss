@@ -1,0 +1,12 @@
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  min-height: 100vh;
+
+  .error-img {
+    width: 450px;
+  }
+}
