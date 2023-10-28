@@ -31,5 +31,24 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 0,
+    'react/prefer-stateless-function': 0,
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'react/state-in-constructor': 0,
+    'no-console': 0,
   },
 };
