@@ -9,13 +9,14 @@ export default class Button extends Component<ButtonProps> {
   };
 
   render() {
-    const { children, buttonStyle } = this.props;
+    const { children, buttonStyle, disabled } = this.props;
     return (
       <button
         type="submit"
         className={styles.button}
         onClick={this.handleButtonClick}
         style={buttonStyle}
+        disabled={disabled}
       >
         {children}
       </button>

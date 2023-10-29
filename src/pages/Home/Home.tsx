@@ -74,6 +74,7 @@ export default class Home extends Component {
           searchValue={searchValue}
           setSearchValue={this.setSearchValue}
           sendSearchValue={this.sendSearchValue}
+          isLoading={isLoading}
         />
         <DataSection data={data} isLoading={isLoading} />
         <Button

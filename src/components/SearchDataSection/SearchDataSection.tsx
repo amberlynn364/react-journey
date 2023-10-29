@@ -6,14 +6,17 @@ import { SearchDataProps } from './SearchDataSectionTypes';
 
 export default class SearchData extends Component<SearchDataProps> {
   render() {
-    const { searchValue, setSearchValue, sendSearchValue } = this.props;
+    const { searchValue, setSearchValue, sendSearchValue, isLoading } =
+      this.props;
     return (
       <section className={styles['search-section']}>
         <SearchBar
           value={searchValue}
           onChange={(newValue) => setSearchValue(newValue)}
         />
-        <Button onClick={sendSearchValue}>Search</Button>
+        <Button onClick={sendSearchValue} disabled={isLoading}>
+          Search
+        </Button>
       </section>
     );
   }

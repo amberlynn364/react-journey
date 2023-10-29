@@ -12,11 +12,19 @@
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
-}
 
-.button:hover {
-  background-color: #1C84FF;
-}
-.button:active {
-  background-color: #006AE8;
+  &:hover {
+    background-color: #1C84FF;
+  }
+
+  &:active {
+    background-color: #006AE8;
+  }
+  &:disabled {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    user-select: none;
+    pointer-events: none;
+  }
 }
