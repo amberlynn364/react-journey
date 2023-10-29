@@ -18,9 +18,7 @@ export default class DataFetcher {
   }
 
   private getApiUrl(value: string): string {
-    return value && value !== this.API_URL
-      ? `${this.API_URL}?search=${value}`
-      : this.API_URL;
+    return value && value !== this.API_URL ? `${this.API_URL}?search=${value}` : this.API_URL;
   }
 
   private async fetchDataFromApi(apiUrl: string): Promise<ApiResponse> {

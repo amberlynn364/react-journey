@@ -19,11 +19,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps> {
     if (hasError) {
       return (
         <div className={styles['error-wrapper']}>
-          <img
-            src="error-img.svg"
-            className={styles['error-img']}
-            alt="error-img"
-          />
+          <img src="error-img.svg" className={styles['error-img']} alt="error-img" />
           <h2>Whoops, Something went wrong</h2>
           <p>Please either refresh the page</p>
         </div>
