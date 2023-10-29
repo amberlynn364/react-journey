@@ -6,7 +6,7 @@ export default class DataCard extends Component<DataCardProps> {
   render() {
     const { data, isLoading } = this.props;
     if (isLoading) return <p>Loading data...</p>;
-    if (data && data.results.length < 1) {
+    if (data && data.results.length === 0) {
       return <p>Character with this name was not found</p>;
     }
     return (

@@ -3,6 +3,9 @@ import SearchDataSection from '../../components/SearchDataSection/SearchDataSect
 import { HomeStates } from './HomeTypes';
 import Button from '../../components/View/Button/Button';
 import DataSection from '../../components/DataSection/DataSection';
+import DataFetcher from '../../services/DataFetcher';
+
+const dataFetcher = new DataFetcher();
 
 export default class Home extends Component {
   state: HomeStates = {
@@ -12,21 +15,30 @@ export default class Home extends Component {
     hasError: false,
   };
 
-  componentDidMount() {
-    this.fetchData();
+  async componentDidMount(): Promise<void> {
+    const { searchValue } = this.state;
+    this.setState({ isLoading: true });
+    try {
+      const data = await dataFetcher.fetchData(searchValue);
+      this.setState({ data });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   }
 
-  setSearchValue = (newValue: string) => {
+  setSearchValue = (newValue: string): void => {
     this.setState({ searchValue: newValue });
   };
 
-  sendSearchValue = async () => {
+  sendSearchValue = async (): Promise<void> => {
     const { searchValue } = this.state;
     localStorage.setItem('searchValue', searchValue);
     this.fetchData(searchValue);
   };
 
-  throwError = () => {
+  throwError = (): void => {
     this.setState({ hasError: true });
   };
 
