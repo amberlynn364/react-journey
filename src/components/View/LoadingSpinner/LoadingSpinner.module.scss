@@ -1,36 +1,36 @@
+@import '../../../sass/utils/mixins.scss';
+@import '../../../sass/utils/variables.scss';
+@import '../../../sass/utils/functions.scss';
+
 .spinner {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  height: 300px;
+  @include flex-center;
+  @include width-height(300px, 300px);
   font-size: 2rem;
   overflow: hidden;
   animation: text-color 2s ease-in-out infinite alternate;
 }
 
-.spinner-sector {
+.spinnerSector {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  @include width-height(100%, 100%);
   border-radius: 50%;
   border: 15px solid transparent;
   mix-blend-mode: overlay;
   pointer-events: none;
 }
 
-.spinner-sector-red {
+.spinnerSectorRed {
   border-top-color: lightcoral;
   animation: rotate 1.5s ease-in-out infinite;
 }
 
-.spinner-sector-blue {
+.spinnerSectorBlue {
   border-left-color: lightblue;
   animation: rotate 2s ease-in infinite;
 }
 
-.spinner-sector-green {
+.spinnerSectorGreen {
   border-right-color: lightgreen;
   animation: rotate 2.5s ease-out infinite;
 }
@@ -55,5 +55,3 @@
     color: rgba(255, 255, 255, 0.1);
   }
 }
-
-  /* animation: rotate 1.5s ease-in-out infinite; */

@@ -1,14 +1,14 @@
 import { Component } from 'react';
-import './LoadingSpinner.css';
+import styles from './LoadingSpinner.module.scss';
 
 export default class LoadingSpinner extends Component {
   render() {
     return (
-      <div className="spinner">
+      <div className={styles.spinner}>
         Loading
-        <div className="spinner-sector spinner-sector-red" />
-        <div className="spinner-sector spinner-sector-blue" />
-        <div className="spinner-sector spinner-sector-green" />
+        <div className={`${styles.spinnerSector} ${styles.spinnerSectorRed}`} />
+        <div className={`${styles.spinnerSector} ${styles.spinnerSectorBlue}`} />
+        <div className={`${styles.spinnerSector} ${styles.spinnerSectorGreen}`} />
       </div>
     );
   }
