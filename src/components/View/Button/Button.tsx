@@ -5,7 +5,7 @@ import { ButtonProps } from './ButtonTypes';
 export default class Button extends Component<ButtonProps> {
   handleButtonClick = () => {
     const { onClick } = this.props;
-    if (onClick) onClick();
+    onClick?.();
   };
 
   render() {
