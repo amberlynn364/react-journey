@@ -1,4 +1,4 @@
-.error-wrapper {
+.errorWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,7 +6,7 @@
   gap: 20px;
   min-height: 100vh;
 
-  .error-img {
+  .errorImg {
     width: 450px;
   }
 }
