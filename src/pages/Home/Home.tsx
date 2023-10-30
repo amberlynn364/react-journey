@@ -4,13 +4,14 @@ import { HomeStates } from './HomeTypes';
 import Button from '../../components/View/Button/Button';
 import DataSection from '../../components/DataSection/DataSection';
 import DataFetcher from '../../services/DataFetcher';
+import localStorageSerive from '../../utils/localStorageService';
 
 const dataFetcher = new DataFetcher();
 
 export default class Home extends Component {
   state: HomeStates = {
     data: null,
-    searchValue: localStorage.getItem('searchValue') || '',
+    searchValue: localStorageSerive.get('searchValue') || '',
     isLoading: false,
     hasError: false,
   };
@@ -36,9 +37,9 @@ export default class Home extends Component {
     }
   };
 
-  sendSearchValue = async (): Promise<void> => {
+  sendSearchValue = (): void => {
     const { searchValue } = this.state;
-    localStorage.setItem('searchValue', searchValue);
+    localStorageSerive.set('searchValue', searchValue);
     this.handleDataFetch();
   };
 
