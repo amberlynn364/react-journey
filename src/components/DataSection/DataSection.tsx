@@ -9,13 +9,13 @@ export default class DataSection extends Component<DataSectionProps> {
     const { data, isLoading } = this.props;
     if (isLoading) {
       return (
-        <section className={styles['data-section']}>
+        <section className={styles.dataSection}>
           <LoadingSpinner />
         </section>
       );
     }
     return (
-      <section className={styles['data-section']}>
+      <section className={styles.dataSection}>
         <h1>Star Wars Characters</h1>
         <DataCard data={data} isLoading={isLoading} />
       </section>
