@@ -1,6 +1,9 @@
 type DebounceCallback<T> = (...args: T[]) => void;
 
-export default function debounce<T>(callback: DebounceCallback<T>, delay: number): DebounceCallback<T> {
+export default function debounce<T>(
+  callback: DebounceCallback<T>,
+  delay: number
+): DebounceCallback<T> {
   let timer: NodeJS.Timeout;
   return (...args: T[]) => {
     clearTimeout(timer);
