@@ -4,7 +4,6 @@ export interface DataCardProps {
     next: string;
     results: Character[];
   } | null;
-  isLoading: boolean;
 }
 export interface Character {
   name: string;
