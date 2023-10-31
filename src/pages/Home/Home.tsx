@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
 import { DataState } from './HomeTypes';
 import DataSection from '../../components/DataSection/DataSection';
-import DataFetcher from '../../services/DataFetcher';
 import localStorageSerive from '../../utils/localStorageService';
-
-const dataFetcher = new DataFetcher();
+import fetchData from '../../services/fetchData';
 
 export default function Home() {
   const [data, setData] = useState<DataState | null>(null);
@@ -17,7 +15,7 @@ export default function Home() {
   const handleDataFetch = async () => {
     setIsLoading(true);
     try {
-      const fetchedData = await dataFetcher.fetchData(searchValue);
+      const fetchedData = await fetchData(searchValue);
       setData(fetchedData);
     } catch (error) {
       console.error('Error fetching data:', error);
