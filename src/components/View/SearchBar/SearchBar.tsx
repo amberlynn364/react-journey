@@ -1,33 +1,29 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent } from 'react';
 import styles from './SearchBar.module.scss';
 import { SearchBarProps } from './SearchBarTypes';
 import debounce from '../../../utils/debounce';
 
-export default class SearchBar extends Component<SearchBarProps> {
-  handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+export default function SeacrhBar({ value, defaultValue, label, onChange }: SearchBarProps) {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    const { onChange } = this.props;
-    const debouncedOnChange = debounce<string>((value) => onChange(value), 100);
+    const debouncedOnChange = debounce<string>((inputValue) => onChange(inputValue), 0);
     debouncedOnChange(newValue);
   };
-
-  render() {
-    const { value } = this.props;
-    return (
-      <div className={`${styles.form}`}>
-        <input
-          type="input"
-          className={styles.formField}
-          placeholder="Enter character name"
-          name="search-bar"
-          id="search-bar"
-          value={value}
-          onChange={this.handleInputChange}
-        />
-        <label htmlFor="search-bar" className={styles.formLabel}>
-          Enter character name
-        </label>
-      </div>
-    );
-  }
+  return (
+    <div className={`${styles.form}`}>
+      <input
+        type="input"
+        className={styles.formField}
+        placeholder={label}
+        name="search-bar"
+        id="search-bar"
+        defaultValue={defaultValue}
+        value={value}
+        onChange={handleInputChange}
+      />
+      <label htmlFor="search-bar" className={styles.formLabel}>
+        {label}
+      </label>
+    </div>
+  );
 }
