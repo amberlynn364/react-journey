@@ -1,25 +1,20 @@
-import { Component } from 'react';
 import styles from './Button.module.scss';
 import { ButtonProps } from './ButtonTypes';
 
-export default class Button extends Component<ButtonProps> {
-  handleButtonClick = () => {
-    const { onClick } = this.props;
+export default function Button({ children, buttonStyle, disabled, onClick }: ButtonProps) {
+  const handleButtonClick = () => {
     onClick?.();
   };
 
-  render() {
-    const { children, buttonStyle, disabled } = this.props;
-    return (
-      <button
-        type="submit"
-        className={styles.button}
-        onClick={this.handleButtonClick}
-        style={buttonStyle}
-        disabled={disabled}
-      >
-        {children}
-      </button>
-    );
-  }
+  return (
+    <button
+      type="submit"
+      className={styles.button}
+      onClick={handleButtonClick}
+      style={buttonStyle}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
 }
