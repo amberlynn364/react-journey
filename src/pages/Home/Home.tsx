@@ -1,73 +1,53 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
-import { HomeStates } from './HomeTypes';
-import Button from '../../components/View/Button/Button';
+import { DataState } from './HomeTypes';
 import DataSection from '../../components/DataSection/DataSection';
 import DataFetcher from '../../services/DataFetcher';
 import localStorageSerive from '../../utils/localStorageService';
 
 const dataFetcher = new DataFetcher();
 
-export default class Home extends Component {
-  state: HomeStates = {
-    data: null,
-    searchValue: localStorageSerive.get('searchValue') || '',
-    isLoading: false,
-    hasError: false,
-  };
+export default function Home() {
+  const [data, setData] = useState<DataState | null>(null);
+  const [searchValue, setSearchValue] = useState<string>(
+    localStorageSerive.get('searchValue') || ''
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  componentDidMount(): void {
-    this.handleDataFetch();
-  }
-
-  setSearchValue = (newValue: string): void => {
-    this.setState({ searchValue: newValue });
-  };
-
-  handleDataFetch = async () => {
-    const { searchValue } = this.state;
-    this.setState({ isLoading: true });
+  const handleDataFetch = async () => {
+    setIsLoading(true);
     try {
-      const data = await dataFetcher.fetchData(searchValue);
-      this.setState({ data });
+      const fetchedData = await dataFetcher.fetchData(searchValue);
+      setData(fetchedData);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  sendSearchValue = (): void => {
-    const { searchValue } = this.state;
+  const handleUpdateSearchValue = (newValue: string): void => {
+    setSearchValue(newValue);
+  };
+
+  const handleSendSearchValue = (): void => {
     localStorageSerive.set('searchValue', searchValue);
-    this.handleDataFetch();
+    handleDataFetch();
   };
+  useEffect(() => {
+    handleDataFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  throwError = (): void => {
-    this.setState({ hasError: true });
-  };
-
-  render() {
-    const { data, searchValue, isLoading, hasError } = this.state;
-    if (hasError) throw new Error('Thrown error');
-    return (
-      <>
-        <SearchDataSection
-          searchValue={searchValue}
-          setSearchValue={this.setSearchValue}
-          sendSearchValue={this.sendSearchValue}
-          isLoading={isLoading}
-        />
-        <DataSection data={data} isLoading={isLoading} />
-        <Button
-          onClick={this.throwError}
-          buttonStyle={{
-            marginBottom: '20px',
-          }}
-        >
-          Throw error!
-        </Button>
-      </>
-    );
-  }
+  return (
+    <>
+      <SearchDataSection
+        searchValue={searchValue}
+        handleUpdateSearchValue={handleUpdateSearchValue}
+        handleSendSearchValue={handleSendSearchValue}
+        isLoading={isLoading}
+      />
+      <DataSection data={data} isLoading={isLoading} />
+    </>
+  );
 }

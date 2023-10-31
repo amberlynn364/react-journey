@@ -5,8 +5,8 @@ import { SearchDataProps } from './SearchDataSectionTypes';
 
 export default function SearchData({
   searchValue,
-  setSearchValue,
-  sendSearchValue,
+  handleUpdateSearchValue,
+  handleSendSearchValue,
   isLoading,
 }: SearchDataProps) {
   return (
@@ -14,9 +14,9 @@ export default function SearchData({
       <SearchBar
         value={searchValue}
         label="Enter character name"
-        onChange={(newValue) => setSearchValue(newValue)}
+        onChange={(newValue) => handleUpdateSearchValue(newValue)}
       />
-      <Button onClick={sendSearchValue} disabled={isLoading}>
+      <Button onClick={handleSendSearchValue} disabled={isLoading}>
         Search
       </Button>
     </section>
