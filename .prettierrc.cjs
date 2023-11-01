@@ -1,0 +1,9 @@
+const config = {
+  trailingComma: 'es5',
+  printWidth: 120,
+  tabWidth: 2,
+  semi: true,
+  singleQuote: true,
+};
+
+module.exports = config;
