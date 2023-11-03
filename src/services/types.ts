@@ -1,7 +1,16 @@
-import { Character } from '../components/DataCard/DataCardTypes';
-
 export interface ApiResponse {
   count: number;
-  next: string;
-  results: Character[];
+  data: PokemonCardData[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+}
+
+export interface PokemonCardData {
+  id: string;
+  name: string;
+  images: {
+    large: string;
+    small: string;
+  };
 }
