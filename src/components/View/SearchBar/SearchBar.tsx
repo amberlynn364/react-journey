@@ -1,13 +1,11 @@
 import { ChangeEvent } from 'react';
 import styles from './SearchBar.module.scss';
 import { SearchBarProps } from './SearchBarTypes';
-import debounce from '../../../utils/debounce';
 
 export default function SeacrhBar({ value, defaultValue, label, onChange }: SearchBarProps) {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    const debouncedOnChange = debounce<string>((inputValue) => onChange(inputValue), 0);
-    debouncedOnChange(newValue);
+    onChange(newValue);
   };
   return (
     <div className={`${styles.form}`}>

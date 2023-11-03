@@ -1,5 +1,5 @@
-import { Character } from '../DataCardTypes';
+import { PokemonCardData } from '../../../services/types';
 
 export interface CardDescriptionProps {
-  character: Character;
+  character: PokemonCardData;
 }
