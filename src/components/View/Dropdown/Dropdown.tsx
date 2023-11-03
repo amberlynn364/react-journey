@@ -6,12 +6,14 @@ export default function Dropdown({ pageSize, handleUpdateItemsOnPage }: DropDown
   return (
     <div className={styles.selectWrapper}>
       <h4>Set the number of card on the page</h4>
-      <select
-        defaultValue={pageSize || ''}
-        onChange={(e) => handleUpdateItemsOnPage(e.target.value)}
-      >
+      <select onChange={(e) => handleUpdateItemsOnPage(e.target.value)}>
+        <option value="" hidden>
+          {pageSize}
+        </option>
         {selectOptions.map((option) => (
-          <option key={option}>{option}</option>
+          <option key={option} value={option}>
+            {option}
+          </option>
         ))}
       </select>
     </div>
