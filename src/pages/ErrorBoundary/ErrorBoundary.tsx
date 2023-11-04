@@ -10,7 +10,7 @@ export default function ErrorBoundary() {
     <div className={styles.errorWrapper}>
       <img src="error-img.svg" className={styles.errorImg} alt="error-img" />
       <h2>Whoops, Something went wrong</h2>
-      <Link to={RouterPath.Home}>
+      <Link to={RouterPath.RootLayout}>
         <Button>Go to Home</Button>
       </Link>
     </div>
