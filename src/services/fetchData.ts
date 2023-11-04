@@ -38,6 +38,16 @@ export async function fetchDataWithName(
   }
 }
 
+export async function fetchDataWithID(id: string) {
+  const apiUrl = `${ApiUrls.DefaultUrl}${id}`;
+  try {
+    const response: ApiResponse = await fetchDataFromApi(apiUrl);
+    return response;
+  } catch (error) {
+    return Promise.reject(new Error(`Error fetching data: ${error}`));
+  }
+}
+
 async function fetchDataFromApi(apiUrl: string): Promise<ApiResponse> {
   const response = await fetch(apiUrl);
 
