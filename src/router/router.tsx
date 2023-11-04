@@ -1,13 +1,25 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home from '../pages/Home/Home';
 import RouterPath from './routerTypes';
 import ErrorBoundary from '../pages/ErrorBoundary/ErrorBoundary';
+import RootLayout from '../components/layouts/RootLayout';
+import SideCardDetails from '../pages/SideCardDetails/SideCardDetails';
+import { fetchDataWithID } from '../services/fetchData';
 
 const router = createBrowserRouter([
   {
-    path: RouterPath.Home,
-    element: <Home />,
+    path: RouterPath.RootLayout,
+    element: <RootLayout />,
     errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: ':id',
+        element: <SideCardDetails />,
+        loader: async ({ params }) => {
+          const data = await fetchDataWithID(params.id || '');
+          return data;
+        },
+      },
+    ],
   },
 ]);
 

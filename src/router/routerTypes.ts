@@ -1,5 +1,5 @@
 enum RouterPath {
-  Home = '/',
+  RootLayout = '/',
   Page404 = '*',
 }
 
