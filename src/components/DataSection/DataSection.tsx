@@ -5,7 +5,7 @@ import LoadingSpinner from '../View/LoadingSpinner/LoadingSpinner';
 import Paginate from '../View/Paginate/Paginate';
 
 export default function DataSection({ data, isLoading, handleUpdatePageNumber }: DataSectionProps) {
-  console.log(data);
+  const isPaginateNecessary: boolean | null = data && data?.totalCount > data?.pageSize;
   return (
     <section className={styles.dataSection}>
       {isLoading ? (
@@ -16,7 +16,9 @@ export default function DataSection({ data, isLoading, handleUpdatePageNumber }:
           <DataCard data={data?.data || []} />
         </>
       )}
-      {!isLoading && <Paginate data={data} handleUpdatePageNumber={handleUpdatePageNumber} />}
+      {!isLoading && isPaginateNecessary && (
+        <Paginate data={data} handleUpdatePageNumber={handleUpdatePageNumber} />
+      )}
     </section>
   );
 }
