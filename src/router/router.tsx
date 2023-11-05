@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RouterPath from './routerTypes';
 import ErrorBoundary from '../pages/ErrorBoundary/ErrorBoundary';
-import RootLayout from '../components/layouts/RootLayout';
 import SideCardDetails from '../pages/SideCardDetails/SideCardDetails';
 import { fetchDataWithID } from '../services/fetchData';
+import RootLayout from '../layouts/RootLayout';
 
 const router = createBrowserRouter([
   {
