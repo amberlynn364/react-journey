@@ -66,7 +66,7 @@ export default function Home() {
       role="button"
       onClick={(e) => {
         const target = e.target as HTMLDivElement;
-        if (target.tagName === 'IMG') return;
+        if (target.tagName === 'IMG' || target.tagName === 'BUTTON') return;
         handleCloseSideMenu();
       }}
       onKeyDown={(e) => {
