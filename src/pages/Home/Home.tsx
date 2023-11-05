@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
 import DataSection from '../../components/DataSection/DataSection';
@@ -6,6 +6,7 @@ import localStorageSerive from '../../utils/localStorageService';
 import { fetchData, fetchDataWithName } from '../../services/fetchData';
 import { ApiResponse } from '../../services/types';
 import usePagination from '../../hooks/usePagination/usePagination';
+import { IAppContext, useAppContext } from '../../MyContext';
 
 export default function Home() {
   const [data, setData] = useState<ApiResponse | null>(null);
@@ -15,14 +16,14 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchParams, setSeacrhParams] = useSearchParams();
   const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(data, setSeacrhParams);
-  const pageSize = searchParams.get('pageSize') || '';
   const currentPage = searchParams.get('page');
   const currentPageSize = searchParams.get('pageSize');
+  const { handleCloseSideMenu } = useAppContext() as IAppContext;
 
   const handleUpdateSearchValue = (newValue: string): void => {
     setSearchValue(newValue);
   };
-  const hanldeFetchDataAndSetData = async (): Promise<void> => {
+  const hanldeFetchDataAndSetData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     try {
       const fetchedData = searchValue
@@ -43,7 +44,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, currentPageSize, searchValue, setSeacrhParams]);
 
   const handleSendSearchValue = async (): Promise<void> => {
     localStorageSerive.set('searchValue', searchValue);
@@ -58,15 +59,27 @@ export default function Home() {
 
   useEffect(() => {
     hanldeFetchDataAndSetData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize]);
+  }, [currentPage, currentPageSize, hanldeFetchDataAndSetData]);
 
   return (
-    <div>
+    <div
+      role="button"
+      onClick={(e) => {
+        const target = e.target as HTMLDivElement;
+        if (target.tagName === 'IMG') return;
+        handleCloseSideMenu();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          handleCloseSideMenu();
+        }
+      }}
+      tabIndex={0}
+    >
       <SearchDataSection
         searchValue={searchValue}
         isLoading={isLoading}
-        pageSize={pageSize}
+        pageSize={currentPageSize}
         handleUpdateSearchValue={handleUpdateSearchValue}
         handleSendSearchValue={handleSendSearchValue}
         handleUpdateItemsOnPage={handleUpdateItemsOnPage}
