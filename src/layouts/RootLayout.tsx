@@ -1,12 +1,15 @@
 import { Outlet } from 'react-router-dom';
 import styles from './RootLayout.module.scss';
 import Home from '../pages/Home/Home';
+import { AppContextProvider } from '../MyContext';
 
 export default function RootLayout() {
   return (
-    <main className={styles.main}>
-      <Home />
-      <Outlet />
-    </main>
+    <AppContextProvider>
+      <main className={styles.main}>
+        <Home />
+        <Outlet />
+      </main>
+    </AppContextProvider>
   );
 }
