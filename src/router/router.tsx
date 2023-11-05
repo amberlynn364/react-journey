@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import RouterPath from './routerTypes';
 import ErrorBoundary from '../pages/ErrorBoundary/ErrorBoundary';
 import SideCardDetails from '../pages/SideCardDetails/SideCardDetails';
-import { fetchDataWithID } from '../services/fetchData';
 import RootLayout from '../layouts/RootLayout';
 
 const router = createBrowserRouter([
@@ -14,10 +13,6 @@ const router = createBrowserRouter([
       {
         path: ':id',
         element: <SideCardDetails />,
-        loader: async ({ params }) => {
-          const data = await fetchDataWithID(params.id || '');
-          return data;
-        },
       },
     ],
   },

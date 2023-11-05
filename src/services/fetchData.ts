@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { LoadedData } from '../pages/SideCardDetails/SideCardDetailsTypes';
 import { ApiResponse } from './types';
 
 enum ApiUrls {
@@ -38,17 +39,17 @@ export async function fetchDataWithName(
   }
 }
 
-export async function fetchDataWithID(id: string) {
+export async function fetchDataWithID(id: string): Promise<LoadedData> {
   const apiUrl = `${ApiUrls.DefaultUrl}${id}`;
   try {
-    const response: ApiResponse = await fetchDataFromApi(apiUrl);
+    const response = await fetchDataFromApi(apiUrl);
     return response;
   } catch (error) {
     return Promise.reject(new Error(`Error fetching data: ${error}`));
   }
 }
 
-async function fetchDataFromApi(apiUrl: string): Promise<ApiResponse> {
+async function fetchDataFromApi(apiUrl: string) {
   const response = await fetch(apiUrl);
 
   if (!response.ok) {
