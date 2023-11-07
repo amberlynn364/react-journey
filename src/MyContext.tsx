@@ -15,15 +15,14 @@ export const useAppContext = () => useContext(AppContext);
 export function AppContextProvider({ children }: { children: ReactNode }) {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const currentURL = useMemo(() => {
-    return new URL(window.location.href);
-  }, []);
 
   const handleCloseSideMenu = useCallback(() => {
+    const currentURL = new URL(window.location.href);
+
     currentURL.pathname = '';
     window.history.pushState(null, '', currentURL.toString());
     setIsMenuOpen(false);
-  }, [currentURL]);
+  }, []);
 
   const contextValues = useMemo(
     () => ({

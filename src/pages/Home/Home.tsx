@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
 import DataSection from '../../components/DataSection/DataSection';
 import localStorageSerive from '../../utils/localStorageService';
@@ -15,15 +15,25 @@ export default function Home() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchParams, setSeacrhParams] = useSearchParams();
-  const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(data, setSeacrhParams);
   const currentPage = searchParams.get('page');
   const currentPageSize = searchParams.get('pageSize');
-  const { handleCloseSideMenu } = useAppContext() as IAppContext;
+  const { handleCloseSideMenu, isMenuOpen } = useAppContext() as IAppContext;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(
+    data,
+    setSeacrhParams,
+    location.pathname,
+    navigate,
+    id,
+    isMenuOpen
+  );
 
   const handleUpdateSearchValue = (newValue: string): void => {
     setSearchValue(newValue);
   };
-  const hanldeFetchDataAndSetData = useCallback(async (): Promise<void> => {
+  const hanldeFetchDataAndSetData = async (): Promise<void> => {
     setIsLoading(true);
     try {
       const fetchedData = searchValue
@@ -44,7 +54,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, currentPageSize, searchValue, setSeacrhParams]);
+  };
 
   const handleSendSearchValue = async (): Promise<void> => {
     localStorageSerive.set('searchValue', searchValue);
@@ -59,19 +69,20 @@ export default function Home() {
 
   useEffect(() => {
     hanldeFetchDataAndSetData();
-  }, [currentPage, currentPageSize, hanldeFetchDataAndSetData]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, currentPageSize]);
   return (
     <div
       role="button"
       onClick={(e) => {
         const target = e.target as HTMLDivElement;
-        if (target.tagName === 'IMG' || target.tagName === 'BUTTON') return;
-        handleCloseSideMenu();
+        if (target.tagName === 'IMG' || target.tagName === 'BUTTON' || target.tagName === 'SELECT')
+          return;
+        if (isMenuOpen) handleCloseSideMenu();
       }}
       onKeyDown={(e) => {
         if (e.key === 'Escape') {
-          handleCloseSideMenu();
+          if (isMenuOpen) handleCloseSideMenu();
         }
       }}
       tabIndex={0}

@@ -7,7 +7,7 @@ export default function SideCardDescription({ data }: { data: LoadedData | undef
   const { name, hp, rarity, types: [firstType] = [], flavorText } = data?.data || {};
   const { handleCloseSideMenu } = useAppContext() as IAppContext;
   return (
-    <>
+    <div className={styles.stickyContainer}>
       <div className={styles.CardDescriptionWrapper}>
         <p>
           Name: <span>{name}</span>
@@ -26,6 +26,6 @@ export default function SideCardDescription({ data }: { data: LoadedData | undef
         </p>
       </div>
       <Button onClick={handleCloseSideMenu}>close menu</Button>
-    </>
+    </div>
   );
 }
