@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './SideCardDetails.module.scss';
 import LoadingSpinner from '../../components/View/LoadingSpinner/LoadingSpinner';
-import { IAppContext, useAppContext } from '../../MyContext';
+import { IAppContext, useAppContext } from '../../MyContext/MyContext';
 import SideCardDescription from './SideCardDescription/SideCardDescription';
 import { fetchDataWithID } from '../../services/fetchData';
 import { LoadedData } from './SideCardDetailsTypes';

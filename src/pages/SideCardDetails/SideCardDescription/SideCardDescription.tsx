@@ -1,4 +1,5 @@
-import { IAppContext, useAppContext } from '../../../MyContext';
+import { useAppContext } from '../../../MyContext/MyContext';
+import { IAppContext } from '../../../MyContext/MyContextTypes';
 import Button from '../../../components/View/Button/Button';
 import { LoadedData } from '../SideCardDetailsTypes';
 import styles from './SideCardDescription.module.scss';
