@@ -8,4 +8,7 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ['./src/test/setup.ts'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sss|styl)$': 'jest-css-modules',
+  },
 };

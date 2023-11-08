@@ -12,7 +12,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jest/recommended',
     'plugin:jest/style',
-    'plugin:testing-library/react'
+    'plugin:testing-library/react',
   ],
   overrides: [
     {
