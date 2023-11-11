@@ -7,6 +7,7 @@ import styles from './SideCardDescription.module.scss';
 export default function SideCardDescription({ data }: { data: LoadedData | undefined }) {
   const { name, hp, rarity, types: [firstType] = [], flavorText } = data?.data || {};
   const { handleCloseSideMenu } = useAppContext() as IAppContext;
+  if (!data) return <Button onClick={handleCloseSideMenu}>close menu</Button>;
   return (
     <div className={styles.stickyContainer}>
       <div className={styles.CardDescriptionWrapper}>

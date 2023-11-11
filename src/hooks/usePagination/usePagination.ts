@@ -70,5 +70,6 @@ export default function usePagination(
   return {
     handleUpdatePageNumber,
     handleUpdateItemsOnPage,
+    deleteIDFromUrl,
   };
 }

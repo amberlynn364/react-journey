@@ -2,10 +2,11 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './SideCardDetails.module.scss';
 import LoadingSpinner from '../../components/View/LoadingSpinner/LoadingSpinner';
-import { IAppContext, useAppContext } from '../../MyContext/MyContext';
+import { useAppContext } from '../../MyContext/MyContext';
 import SideCardDescription from './SideCardDescription/SideCardDescription';
 import { fetchDataWithID } from '../../services/fetchData';
 import { LoadedData } from './SideCardDetailsTypes';
+import { IAppContext } from '../../MyContext/MyContextTypes';
 
 export default function SideCardDetails() {
   const { id } = useParams();
@@ -37,6 +38,7 @@ export default function SideCardDetails() {
   if (!isMenuOpen) return null;
   return (
     <section className={styles.CardDetails}>
+      <h2>Side Card</h2>
       {isLoading ? <LoadingSpinner /> : <SideCardDescription data={data} />}
     </section>
   );

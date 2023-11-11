@@ -62,3 +62,14 @@ test('SideCardDescription closes the menu', async () => {
     expect(screen.getByText('Menu is closed')).toBeInTheDocument();
   });
 });
+
+test('renders correctly when data is undefined', () => {
+  const { container } = render(
+    <AppContextProvider>
+      <MemoryRouter>
+        <SideCardDescription data={undefined} />
+      </MemoryRouter>
+    </AppContextProvider>
+  );
+  expect(container.textContent).toBe('close menu');
+});
