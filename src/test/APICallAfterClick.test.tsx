@@ -6,8 +6,8 @@ import { AppContextProvider } from '../MyContext/MyContext';
 import Home from '../pages/Home/Home';
 import SideCardDetails from '../pages/SideCardDetails/SideCardDetails';
 
-fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
 test('makes API call after link click', async () => {
+  fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
   render(
     <AppContextProvider>
       <Routes>
@@ -21,6 +21,9 @@ test('makes API call after link click', async () => {
   const user = userEvent.setup();
 
   const fetchSpy = jest.spyOn(global, 'fetch');
+  await waitFor(async () => {
+    expect(screen.getAllByRole('link')[0]).toBeInTheDocument();
+  });
   await waitFor(async () => {
     await user.click(screen.getAllByRole('link')[0]);
   });

@@ -3,7 +3,7 @@ import SearchBar from '../components/View/SearchBar/SearchBar';
 
 describe('SearchBar component', () => {
   it('renders correctly', () => {
-    render(<SearchBar label="Search" value="" defaultValue="" onChange={() => {}} />);
+    render(<SearchBar label="Search" value="" onChange={() => {}} />);
 
     const inputElement = screen.getByPlaceholderText('Search');
     const labelElement = screen.getByLabelText('Search');
@@ -14,7 +14,7 @@ describe('SearchBar component', () => {
 
   it('handles user input correctly', () => {
     const onChangeMock = jest.fn();
-    render(<SearchBar label="Search" value="" defaultValue="" onChange={onChangeMock} />);
+    render(<SearchBar label="Search" value="" onChange={onChangeMock} />);
 
     const inputElement = screen.getByPlaceholderText('Search');
 

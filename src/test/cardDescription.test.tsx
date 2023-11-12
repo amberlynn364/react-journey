@@ -32,9 +32,8 @@ test('CardDescription render the relevant card data', () => {
   expect(imageElement).toHaveAttribute('alt', mockData.name);
 });
 
-fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
-
 test('renders SideCardDetails component after click link', async () => {
+  fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
   render(
     <AppContextProvider>
       <Routes>
@@ -48,7 +47,23 @@ test('renders SideCardDetails component after click link', async () => {
   const user = userEvent.setup();
 
   await waitFor(async () => {
+    expect(screen.getAllByRole('link')[0]).toBeInTheDocument();
+  });
+  await waitFor(async () => {
     await user.click(screen.getAllByRole('link')[0]);
   });
   expect(screen.getByText('Side Card')).toBeInTheDocument();
 });
+// test('renders SideCardDetails loading component after click link', async () => {
+//   render(
+//     <AppContextProvider>
+//       <Routes>
+//         <Route path="/" element={<Home />} />
+//         <Route path="/:id" element={<SideCardDetails />} />
+//       </Routes>
+//     </AppContextProvider>,
+//     { wrapper: BrowserRouter }
+//   );
+
+//   expect(screen.getByText('Loading')).toBeInTheDocument();
+// });

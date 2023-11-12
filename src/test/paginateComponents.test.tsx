@@ -45,7 +45,7 @@ describe('Paginate component', () => {
       ],
       totalCount: 100,
       pageSize: 10,
-      page: 1,
+      page: 3,
     };
 
     const handleUpdatePageNumberMock = jest.fn();
