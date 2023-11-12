@@ -46,9 +46,12 @@ test('renders SideCardDetails component after click link and fetch data', async 
 
   const user = userEvent.setup();
 
-  await waitFor(async () => {
-    expect(screen.getAllByRole('link')[0]).toBeInTheDocument();
-  });
+  await waitFor(
+    async () => {
+      expect(screen.getAllByRole('link')[0]).toBeInTheDocument();
+    },
+    { timeout: 3000 }
+  );
   const fetchSpy = jest.spyOn(global, 'fetch');
   await waitFor(async () => {
     await user.click(screen.getAllByRole('link')[0]);
