@@ -32,7 +32,7 @@ test('CardDescription render the relevant card data', () => {
   expect(imageElement).toHaveAttribute('alt', mockData.name);
 });
 
-test('renders SideCardDetails component after click link', async () => {
+test('renders SideCardDetails component after click link and fetch data', async () => {
   fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
   render(
     <AppContextProvider>
@@ -49,21 +49,23 @@ test('renders SideCardDetails component after click link', async () => {
   await waitFor(async () => {
     expect(screen.getAllByRole('link')[0]).toBeInTheDocument();
   });
+  const fetchSpy = jest.spyOn(global, 'fetch');
   await waitFor(async () => {
     await user.click(screen.getAllByRole('link')[0]);
   });
   expect(screen.getByText('Side Card')).toBeInTheDocument();
+  expect(fetchSpy).toHaveBeenCalled();
 });
-// test('renders SideCardDetails loading component after click link', async () => {
-//   render(
-//     <AppContextProvider>
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         <Route path="/:id" element={<SideCardDetails />} />
-//       </Routes>
-//     </AppContextProvider>,
-//     { wrapper: BrowserRouter }
-//   );
+test('renders SideCardDetails loading component', async () => {
+  render(
+    <AppContextProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/:id" element={<SideCardDetails />} />
+      </Routes>
+    </AppContextProvider>,
+    { wrapper: BrowserRouter }
+  );
 
-//   expect(screen.getByText('Loading')).toBeInTheDocument();
-// });
+  expect(screen.getByText('Loading')).toBeInTheDocument();
+});
