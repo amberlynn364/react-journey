@@ -7,9 +7,12 @@ import { fetchData, fetchDataWithName } from '../../services/fetchData';
 import usePagination from '../../hooks/usePagination/usePagination';
 import { useAppContext } from '../../MyContext/MyContext';
 import { IAppContext } from '../../MyContext/MyContextTypes';
+import { useAppSelector } from '../../store/hooks';
+import selectSearchValue from '../../store/features/searchValue/searchValueSelector';
 
 export default function Home() {
-  const { data, setData, searchValue, setIsLoading, handleCloseSideMenu, isMenuOpen } =
+  const searchValue = useAppSelector(selectSearchValue);
+  const { data, setData, setIsLoading, handleCloseSideMenu, isMenuOpen } =
     useAppContext() as IAppContext;
   const [searchParams, setSeacrhParams] = useSearchParams();
   const currentPage = searchParams.get('page');
