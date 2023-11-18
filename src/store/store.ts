@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import searchValueSlice from './features/searchValue/searchValueSlice';
 import dataSlice from './features/data/dataSlice';
 import itemsPerPageSlice from './features/itemsPerPage/itemsPerPageSlice';
-import pokemonApi from '../services/pokemonApi';
+import pokemonApi from './features/pokemonApi/pokemonApi';
 import mainPageLoadingSlice from './features/mainPageLoading/mainPageLoadingSlice';
 import sidePageLoadingSlice from './features/sidePageLoading/sidePageLoadingSlice';
 

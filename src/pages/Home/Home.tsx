@@ -1,27 +1,37 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
 import DataSection from '../../components/DataSection/DataSection';
 import localStorageSerive from '../../utils/localStorageService';
-import { fetchData, fetchDataWithName } from '../../services/fetchData';
 import usePagination from '../../hooks/usePagination/usePagination';
 import { useAppContext } from '../../MyContext/MyContext';
 import { IAppContext } from '../../MyContext/MyContextTypes';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import selectSearchValue from '../../store/features/searchValue/searchValueSelector';
+import selectItemsPerPage from '../../store/features/itemsPerPage/itemsPerPageSelector';
+import { useFetchDataQuery } from '../../store/features/pokemonApi/pokemonApi';
+import { setIsMainPageLoading } from '../../store/features/mainPageLoading/mainPageLoadingSlice';
+import { setData } from '../../store/features/data/dataSlice';
 
 export default function Home() {
-  const searchValue = useAppSelector(selectSearchValue);
-  const { data, setData, setIsLoading, handleCloseSideMenu, isMenuOpen } =
-    useAppContext() as IAppContext;
+  const dispatch = useAppDispatch();
   const [searchParams, setSeacrhParams] = useSearchParams();
+  const searchValue = useAppSelector(selectSearchValue);
+  const itemsPerPage = useAppSelector(selectItemsPerPage);
   const currentPage = searchParams.get('page');
-  const currentPageSize = searchParams.get('pageSize');
+  const currentPageSize = searchParams.get('pageSize') || itemsPerPage;
+  const [queryParams, setQueryParams] = useState({
+    searchValue,
+    currentPage,
+    currentPageSize,
+  });
+  const { data: fetchedData, isFetching, refetch } = useFetchDataQuery(queryParams);
+  const { handleCloseSideMenu, isMenuOpen } = useAppContext() as IAppContext;
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(
-    data,
+    fetchedData,
     setSeacrhParams,
     location.pathname,
     navigate,
@@ -32,7 +42,7 @@ export default function Home() {
   const updateQueryParams = useCallback(
     (page: string, pageSize: string) => {
       if (!currentPage && !currentPageSize) {
-        if (data && data.page && data.pageSize) {
+        if (fetchedData && fetchedData.page && fetchedData.pageSize) {
           setSeacrhParams({
             page,
             pageSize,
@@ -40,45 +50,38 @@ export default function Home() {
         }
       }
     },
-    [currentPage, currentPageSize, data, setSeacrhParams]
+    [currentPage, currentPageSize, fetchedData, setSeacrhParams]
   );
 
-  const hanldeFetchDataAndSetData = async (): Promise<void> => {
-    try {
-      const fetchedData = searchValue
-        ? await fetchDataWithName(searchValue, currentPage, currentPageSize)
-        : await fetchData(currentPage, currentPageSize);
+  const handleRefreshData = () => {
+    setQueryParams({
+      searchValue,
+      currentPage,
+      currentPageSize,
+    });
 
-      setData(fetchedData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    refetch();
   };
 
   const handleSendSearchValue = async (): Promise<void> => {
-    setIsLoading(true);
     localStorageSerive.set('searchValue', searchValue);
-    await hanldeFetchDataAndSetData();
-    if (data) {
-      setSeacrhParams({
-        page: '1',
-        pageSize: data.pageSize.toString(),
-      });
-    }
-    setIsLoading(false);
+    handleRefreshData();
+    updateQueryParams(currentPage || '', currentPageSize);
   };
 
   useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      await hanldeFetchDataAndSetData();
-      updateQueryParams(data?.page.toString() || '', data?.pageSize.toString() || '');
-      setIsLoading(false);
-    };
+    if (fetchedData) dispatch(setData(fetchedData));
+  }, [fetchedData, dispatch]);
 
-    getData();
+  useEffect(() => {
+    handleRefreshData();
+    updateQueryParams(currentPage || '', currentPageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, currentPageSize]);
+
+  useEffect(() => {
+    dispatch(setIsMainPageLoading(isFetching));
+  }, [isFetching, dispatch]);
   return (
     <div
       role="button"

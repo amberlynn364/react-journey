@@ -2,7 +2,7 @@
 import { LoadedData } from '../pages/SideCardDetails/SideCardDetailsTypes';
 import { ApiResponse } from './types';
 
-enum ApiUrls {
+export enum ApiUrls {
   DefaultUrl = 'https://api.pokemontcg.io/v2/cards/',
 }
 

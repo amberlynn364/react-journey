@@ -13,7 +13,7 @@ const dataSlice = createSlice({
   name: 'data',
   initialState,
   reducers: {
-    setData: (state, action: PayloadAction<ApiResponse | null>) => {
+    setData: (state, action: PayloadAction<ApiResponse>) => {
       state.data = action.payload;
     },
   },
