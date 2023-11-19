@@ -4,20 +4,21 @@ import SearchDataSection from '../../components/SearchDataSection/SearchDataSect
 import DataSection from '../../components/DataSection/DataSection';
 import localStorageSerive from '../../utils/localStorageService';
 import usePagination from '../../hooks/usePagination/usePagination';
-import { useAppContext } from '../../MyContext/MyContext';
-import { IAppContext } from '../../MyContext/MyContextTypes';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import selectSearchValue from '../../store/features/searchValue/searchValueSelector';
 import selectItemsPerPage from '../../store/features/itemsPerPage/itemsPerPageSelector';
 import { useFetchDataQuery } from '../../store/features/pokemonApi/pokemonApi';
 import { setIsMainPageLoading } from '../../store/features/mainPageLoading/mainPageLoadingSlice';
 import { setData } from '../../store/features/data/dataSlice';
+import selectIsSideMenuOpen from '../../store/features/openSideMenu/openSideMenuSelector';
+import { setIsOpenSideMenu } from '../../store/features/openSideMenu/openSideMenuSlice';
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const [searchParams, setSeacrhParams] = useSearchParams();
   const searchValue = useAppSelector(selectSearchValue);
   const itemsPerPage = useAppSelector(selectItemsPerPage);
+  const isMenuOpen = useAppSelector(selectIsSideMenuOpen);
   const currentPage = searchParams.get('page');
   const currentPageSize = searchParams.get('pageSize') || itemsPerPage;
   const [queryParams, setQueryParams] = useState({
@@ -26,7 +27,6 @@ export default function Home() {
     currentPageSize,
   });
   const { data: fetchedData, isFetching, refetch } = useFetchDataQuery(queryParams);
-  const { handleCloseSideMenu, isMenuOpen } = useAppContext() as IAppContext;
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -67,6 +67,13 @@ export default function Home() {
     localStorageSerive.set('searchValue', searchValue);
     handleRefreshData();
     updateQueryParams(currentPage || '', currentPageSize);
+  };
+
+  const handleCloseSideMenu = () => {
+    const currentURL = new URL(window.location.href);
+    currentURL.pathname = '';
+    window.history.pushState(null, '', currentURL.toString());
+    dispatch(setIsOpenSideMenu(false));
   };
 
   useEffect(() => {

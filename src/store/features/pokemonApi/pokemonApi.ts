@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ApiUrls } from '../../../services/fetchData';
-import { ApiResponse } from '../../../services/types';
+import { ApiResponse, ApiUrls } from '../../../services/types';
 import { LoadedData } from '../../../pages/SideCardDetails/SideCardDetailsTypes';
 
 interface FetchDataOptions {

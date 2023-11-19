@@ -2,30 +2,30 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './SideCardDetails.module.scss';
 import LoadingSpinner from '../../components/View/LoadingSpinner/LoadingSpinner';
-import { useAppContext } from '../../MyContext/MyContext';
 import SideCardDescription from './SideCardDescription/SideCardDescription';
 import { LoadedData } from './SideCardDetailsTypes';
-import { IAppContext } from '../../MyContext/MyContextTypes';
 import { useFetchDataWithIdQuery } from '../../store/features/pokemonApi/pokemonApi';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import selectSidePageLoading from '../../store/features/sidePageLoading/sidePageLoadingSelector';
 import { setSidePageLoadingSelector } from '../../store/features/sidePageLoading/sidePageLoadingSlice';
+import selectIsSideMenuOpen from '../../store/features/openSideMenu/openSideMenuSelector';
+import { setIsOpenSideMenu } from '../../store/features/openSideMenu/openSideMenuSlice';
 
 export default function SideCardDetails() {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectSidePageLoading);
+  const isMenuOpen = useAppSelector(selectIsSideMenuOpen);
   const { id } = useParams();
   const { data: loadedData, isFetching } = useFetchDataWithIdQuery(id || '');
 
   const currentURL = new URL(window.location.href);
   const [data, setData] = useState<LoadedData | undefined>();
-  const { isMenuOpen, setIsMenuOpen } = useAppContext() as IAppContext;
 
   useEffect(() => {
     if (id && currentURL.pathname.includes(id)) {
-      setIsMenuOpen(true);
+      dispatch(setIsOpenSideMenu(true));
     }
-  }, [id, currentURL.pathname, setIsMenuOpen]);
+  }, [currentURL.pathname, dispatch, id]);
 
   useEffect(() => {
     setData(loadedData);

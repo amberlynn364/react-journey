@@ -6,6 +6,7 @@ import itemsPerPageSlice from './features/itemsPerPage/itemsPerPageSlice';
 import pokemonApi from './features/pokemonApi/pokemonApi';
 import mainPageLoadingSlice from './features/mainPageLoading/mainPageLoadingSlice';
 import sidePageLoadingSlice from './features/sidePageLoading/sidePageLoadingSlice';
+import openSideMenuSlice from './features/openSideMenu/openSideMenuSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     itemsPerPage: itemsPerPageSlice.reducer,
     mainPageLoading: mainPageLoadingSlice.reducer,
     sidePageLoading: sidePageLoadingSlice.reducer,
+    openSideMenu: openSideMenuSlice.reducer,
     [pokemonApi.reducerPath]: pokemonApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
@@ -23,5 +25,7 @@ export const store = configureStore({
 
 setupListeners(store.dispatch);
 export type RootState = ReturnType<typeof store.getState>;
+export type AppStore = ReturnType<typeof store.dispatch>;
+// export type AppDispatch = AppStore['dispatch']
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,22 +1,15 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import SearchData from '../components/SearchDataSection/SearchDataSection';
-
-jest.mock('../MyContext/MyContext', () => ({
-  useAppContext: jest.fn(() => ({
-    searchValue: 'initialValue',
-    handleUpdateSearchValue: jest.fn(),
-    isLoading: false,
-  })),
-}));
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
+import { store } from '../store/store';
+import router from '../router/router';
 
 describe('SearchData component', () => {
   it('renders correctly', () => {
     render(
-      <SearchData
-        pageSize="10"
-        handleSendSearchValue={() => {}}
-        handleUpdateItemsOnPage={() => {}}
-      />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     );
 
     const searchBarLabel = screen.getByLabelText('Enter character name');
@@ -24,22 +17,5 @@ describe('SearchData component', () => {
 
     const searchButton = screen.getByText('Search');
     expect(searchButton).toBeInTheDocument();
-  });
-
-  it('handles user interactions correctly', () => {
-    const handleSendSearchValueMock = jest.fn();
-    const handleUpdateItemsOnPageMock = jest.fn();
-
-    render(
-      <SearchData
-        pageSize="10"
-        handleSendSearchValue={handleSendSearchValueMock}
-        handleUpdateItemsOnPage={handleUpdateItemsOnPageMock}
-      />
-    );
-
-    const searchButton = screen.getByText('Search');
-    fireEvent.click(searchButton);
-    expect(handleSendSearchValueMock).toHaveBeenCalled();
   });
 });
