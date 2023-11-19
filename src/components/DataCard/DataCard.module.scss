@@ -1,0 +1,22 @@
+@import '../../sass/utils/mixins';
+
+.cardList {
+  @include flex-center();
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+
+  .card {
+    @include flex-column-gap(10px);
+    padding: 10px;
+    border-radius: 3px;
+    color: #fff;
+    transition: scale 0.3s;
+    user-select: none;
+
+    &:hover {
+      scale: 1.05;
+    }
+  }
+}
