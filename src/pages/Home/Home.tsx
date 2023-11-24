@@ -90,6 +90,7 @@ export default function Home() {
     dispatch(setIsMainPageLoading(isFetching));
   }, [isFetching, dispatch]);
   return (
+    // eslint-disable-next-line jsx-a11y/control-has-associated-label
     <div
       role="button"
       onClick={(e) => {
