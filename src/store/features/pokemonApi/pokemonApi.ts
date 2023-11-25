@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ApiResponse, ApiUrls } from '../../../services/types';
-import { LoadedData } from '../../../pages/SideCardDetails/SideCardDetailsTypes';
+import { LoadedData } from '../../../components/SideCardDetails/SideCardDetailsTypes';
 
 interface FetchDataOptions {
   searchValue: string;
-  currentPage: string | null;
-  currentPageSize: string;
+  page: string;
+  pageSize: string;
 }
 
 const pokemonApi = createApi({
@@ -14,11 +14,11 @@ const pokemonApi = createApi({
   endpoints: (builder) => ({
     fetchData: builder.query<ApiResponse, FetchDataOptions>({
       query: (options) => {
-        const { searchValue, currentPage, currentPageSize } = options;
+        const { searchValue, page, pageSize } = options;
         const url = !searchValue
-          ? `?page=${currentPage || '1'}&pageSize=${currentPageSize || '10'}&select=id,name,images`
-          : `?q=name:${searchValue}*&page=${currentPage || '1'}&pageSize=${
-              currentPageSize || '10'
+          ? `?page=${page || '1'}&pageSize=${pageSize || '10'}&select=id,name,images`
+          : `?q=name:${searchValue}*&page=${page || '1'}&pageSize=${
+              pageSize || '10'
             }&select=id,name,images`;
 
         return { url };
@@ -32,6 +32,10 @@ const pokemonApi = createApi({
   }),
 });
 
-export const { useFetchDataQuery, useFetchDataWithIdQuery } = pokemonApi;
+export const {
+  useFetchDataQuery,
+  useFetchDataWithIdQuery,
+  util: { getRunningQueriesThunk },
+} = pokemonApi;
 
 export default pokemonApi;

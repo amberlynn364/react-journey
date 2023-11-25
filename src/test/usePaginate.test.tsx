@@ -1,7 +1,7 @@
 import { NavigateFunction } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import usePagination from '../hooks/usePagination/usePagination';
+import usePagination from '../hooks/usePagination/usePaginationOLD';
 import { ApiResponse } from '../services/types';
 import { store } from '../store/store';
 
