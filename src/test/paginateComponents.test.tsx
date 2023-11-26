@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouterProvider } from 'next-router-mock/dist/MemoryRouterProvider';
+import mockRouter from 'next-router-mock';
 import Paginate from '../components/View/Paginate/Paginate';
 import { ApiResponse } from '../services/types';
 
@@ -21,7 +23,7 @@ describe('Paginate component', () => {
       page: 1,
     };
 
-    render(<Paginate data={mockData} handleUpdatePageNumber={() => {}} />);
+    render(<Paginate data={mockData} />, { wrapper: MemoryRouterProvider });
 
     expect(screen.getByText('First Page')).toBeInTheDocument();
     expect(screen.getByText('Prev Page')).toBeInTheDocument();
@@ -48,20 +50,20 @@ describe('Paginate component', () => {
       page: 3,
     };
 
-    const handleUpdatePageNumberMock = jest.fn();
-
-    render(<Paginate data={mockData} handleUpdatePageNumber={handleUpdatePageNumberMock} />);
+    render(<Paginate data={mockData} />, { wrapper: MemoryRouterProvider });
 
     fireEvent.click(screen.getByText('Next Page'));
-    expect(handleUpdatePageNumberMock).toHaveBeenCalledWith('increment');
+    expect(mockRouter.asPath).toBe('/?page=2&pageSize=10');
 
     fireEvent.click(screen.getByText('Prev Page'));
-    expect(handleUpdatePageNumberMock).toHaveBeenCalledWith('decrement');
+    expect(mockRouter.asPath).toBe('/?page=1&pageSize=10');
 
     fireEvent.click(screen.getByText('First Page'));
-    expect(handleUpdatePageNumberMock).toHaveBeenCalledWith('first-page');
+    expect(mockRouter.asPath).toBe('/?page=1&pageSize=10');
+
+    const totalPages = Math.ceil(mockData.totalCount / mockData.pageSize);
 
     fireEvent.click(screen.getByText('Last Page'));
-    expect(handleUpdatePageNumberMock).toHaveBeenCalledWith('last-page');
+    expect(mockRouter.asPath).toBe(`/?page=${totalPages}&pageSize=10`);
   });
 });

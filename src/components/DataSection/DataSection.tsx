@@ -7,7 +7,6 @@ import selectMainPageLoading from '../../store/features/mainPageLoading/mainPage
 import selectData from '../../store/features/data/dataSelector';
 
 export default function DataSection() {
-  // export default function DataSection({ handleUpdatePageNumber }: DataSectionProps) {
   const data = useAppSelector(selectData);
   const isLoading = useAppSelector(selectMainPageLoading);
   const isPaginateNecessary: boolean | null = data && data?.totalCount > data?.pageSize;

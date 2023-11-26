@@ -1,6 +1,10 @@
+import mockRouter from 'next-router-mock';
+import router from 'next/router';
 import calculateTotalPages from '../utils/calculateTotalPages';
 import debounce from '../utils/debounce';
 import localStorageSerive from '../utils/localStorageService';
+import handleCloseSideMenu from '../utils/closeSideMenu';
+// import handleCloseSideMenu from '../utils/closeSideMenu';
 
 describe('local storage service', () => {
   beforeEach(() => {
@@ -54,5 +58,17 @@ describe('debounce', () => {
     jest.advanceTimersByTime(1000);
 
     expect(callback).toHaveBeenCalledTimes(1);
+  });
+});
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
+
+describe('handleCloseSideMenu', () => {
+  it('should update router query correctly', () => {
+    router.push('/?page=1&pageSize=10&details=ex12-1');
+
+    handleCloseSideMenu();
+
+    expect(mockRouter.asPath).toBe('/?page=1&pageSize=10');
   });
 });

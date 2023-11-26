@@ -8,7 +8,7 @@ import { store } from '../store/store';
 
 it('should fetch data successfully', async () => {
   const { result } = renderHook(
-    () => useFetchDataQuery({ searchValue: 'pikachu', currentPage: '1', currentPageSize: '10' }),
+    () => useFetchDataQuery({ searchValue: 'pikachu', page: '1', pageSize: '10' }),
     {
       wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
     }

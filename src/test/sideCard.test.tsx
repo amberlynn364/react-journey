@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import SideCardDescription from '../pages/SideCardDetails/SideCardDescription/SideCardDescription';
+import { MemoryRouterProvider } from 'next-router-mock/dist/MemoryRouterProvider';
 import { store } from '../store/store';
+import SideCardDescription from '../components/SideCardDetails/SideCardDescription/SideCardDescription';
 
 test('renders SideCardDescription component with correct data', async () => {
   const mockData = {
@@ -19,7 +19,7 @@ test('renders SideCardDescription component with correct data', async () => {
     <Provider store={store}>
       <SideCardDescription data={mockData} />
     </Provider>,
-    { wrapper: MemoryRouter }
+    { wrapper: MemoryRouterProvider }
   );
 
   expect(screen.getByText('Name:')).toHaveTextContent('Card Name');
@@ -34,7 +34,7 @@ test('renders correctly when data is undefined', () => {
     <Provider store={store}>
       <SideCardDescription data={undefined} />
     </Provider>,
-    { wrapper: MemoryRouter }
+    { wrapper: MemoryRouterProvider }
   );
   expect(container.textContent).toBe('close menu');
 });
