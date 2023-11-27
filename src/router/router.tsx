@@ -3,6 +3,7 @@ import RouterPath from './routerTypes';
 import ErrorBoundary from '../pages/ErrorBoundary/ErrorBoundary';
 import SideCardDetails from '../pages/SideCardDetails/SideCardDetails';
 import RootLayout from '../layouts/RootLayout';
+import Page404 from '../pages/Page404/Page404';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         element: <SideCardDetails />,
       },
     ],
+  },
+  {
+    path: RouterPath.Page404,
+    element: <Page404 />,
   },
 ]);
 

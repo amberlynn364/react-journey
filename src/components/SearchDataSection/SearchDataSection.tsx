@@ -3,15 +3,15 @@ import SearchBar from '../View/SearchBar/SearchBar';
 import Button from '../View/Button/Button';
 import { SearchDataProps } from './SearchDataSectionTypes';
 import Dropdown from '../View/Dropdown/Dropdown';
+import { useAppContext } from '../../MyContext/MyContext';
+import { IAppContext } from '../../MyContext/MyContextTypes';
 
 export default function SearchData({
-  searchValue,
-  isLoading,
   pageSize,
-  handleUpdateSearchValue,
   handleSendSearchValue,
   handleUpdateItemsOnPage,
 }: SearchDataProps) {
+  const { searchValue, handleUpdateSearchValue, isLoading } = useAppContext() as IAppContext;
   return (
     <section className={styles['search-section']}>
       <SearchBar

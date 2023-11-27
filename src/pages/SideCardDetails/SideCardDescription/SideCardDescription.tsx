@@ -1,4 +1,5 @@
-import { IAppContext, useAppContext } from '../../../MyContext';
+import { useAppContext } from '../../../MyContext/MyContext';
+import { IAppContext } from '../../../MyContext/MyContextTypes';
 import Button from '../../../components/View/Button/Button';
 import { LoadedData } from '../SideCardDetailsTypes';
 import styles from './SideCardDescription.module.scss';
@@ -6,8 +7,9 @@ import styles from './SideCardDescription.module.scss';
 export default function SideCardDescription({ data }: { data: LoadedData | undefined }) {
   const { name, hp, rarity, types: [firstType] = [], flavorText } = data?.data || {};
   const { handleCloseSideMenu } = useAppContext() as IAppContext;
+  if (!data) return <Button onClick={handleCloseSideMenu}>close menu</Button>;
   return (
-    <>
+    <div className={styles.stickyContainer}>
       <div className={styles.CardDescriptionWrapper}>
         <p>
           Name: <span>{name}</span>
@@ -26,6 +28,6 @@ export default function SideCardDescription({ data }: { data: LoadedData | undef
         </p>
       </div>
       <Button onClick={handleCloseSideMenu}>close menu</Button>
-    </>
+    </div>
   );
 }
