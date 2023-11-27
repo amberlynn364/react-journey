@@ -1,73 +1,94 @@
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import SearchDataSection from '../../components/SearchDataSection/SearchDataSection';
-import { HomeStates } from './HomeTypes';
-import Button from '../../components/View/Button/Button';
 import DataSection from '../../components/DataSection/DataSection';
-import DataFetcher from '../../services/DataFetcher';
 import localStorageSerive from '../../utils/localStorageService';
+import { fetchData, fetchDataWithName } from '../../services/fetchData';
+import { ApiResponse } from '../../services/types';
+import usePagination from '../../hooks/usePagination/usePagination';
+import { IAppContext, useAppContext } from '../../MyContext';
 
-const dataFetcher = new DataFetcher();
+export default function Home() {
+  const [data, setData] = useState<ApiResponse | null>(null);
+  const [searchValue, setSearchValue] = useState<string>(
+    localStorageSerive.get('searchValue') || ''
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchParams, setSeacrhParams] = useSearchParams();
+  const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(data, setSeacrhParams);
+  const currentPage = searchParams.get('page');
+  const currentPageSize = searchParams.get('pageSize');
+  const { handleCloseSideMenu } = useAppContext() as IAppContext;
 
-export default class Home extends Component {
-  state: HomeStates = {
-    data: null,
-    searchValue: localStorageSerive.get('searchValue') || '',
-    isLoading: false,
-    hasError: false,
+  const handleUpdateSearchValue = (newValue: string): void => {
+    setSearchValue(newValue);
   };
-
-  componentDidMount(): void {
-    this.handleDataFetch();
-  }
-
-  setSearchValue = (newValue: string): void => {
-    this.setState({ searchValue: newValue });
-  };
-
-  handleDataFetch = async () => {
-    const { searchValue } = this.state;
-    this.setState({ isLoading: true });
+  const hanldeFetchDataAndSetData = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
     try {
-      const data = await dataFetcher.fetchData(searchValue);
-      this.setState({ data });
+      const fetchedData = searchValue
+        ? await fetchDataWithName(searchValue, currentPage, currentPageSize)
+        : await fetchData(currentPage, currentPageSize);
+
+      setData(fetchedData);
+      if (!currentPage && !currentPageSize) {
+        if (fetchedData && fetchedData.page && fetchedData.pageSize) {
+          setSeacrhParams({
+            page: fetchedData.page.toString(),
+            pageSize: fetchedData.pageSize.toString(),
+          });
+        }
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
+    }
+  }, [currentPage, currentPageSize, searchValue, setSeacrhParams]);
+
+  const handleSendSearchValue = async (): Promise<void> => {
+    localStorageSerive.set('searchValue', searchValue);
+    hanldeFetchDataAndSetData();
+    if (data) {
+      setSeacrhParams({
+        page: '1',
+        pageSize: data.pageSize.toString(),
+      });
     }
   };
 
-  sendSearchValue = (): void => {
-    const { searchValue } = this.state;
-    localStorageSerive.set('searchValue', searchValue);
-    this.handleDataFetch();
-  };
+  useEffect(() => {
+    hanldeFetchDataAndSetData();
+  }, [currentPage, currentPageSize, hanldeFetchDataAndSetData]);
 
-  throwError = (): void => {
-    this.setState({ hasError: true });
-  };
-
-  render() {
-    const { data, searchValue, isLoading, hasError } = this.state;
-    if (hasError) throw new Error('Thrown error');
-    return (
-      <>
-        <SearchDataSection
-          searchValue={searchValue}
-          setSearchValue={this.setSearchValue}
-          sendSearchValue={this.sendSearchValue}
-          isLoading={isLoading}
-        />
-        <DataSection data={data} isLoading={isLoading} />
-        <Button
-          onClick={this.throwError}
-          buttonStyle={{
-            marginBottom: '20px',
-          }}
-        >
-          Throw error!
-        </Button>
-      </>
-    );
-  }
+  return (
+    <div
+      role="button"
+      onClick={(e) => {
+        const target = e.target as HTMLDivElement;
+        if (target.tagName === 'IMG' || target.tagName === 'BUTTON') return;
+        handleCloseSideMenu();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          handleCloseSideMenu();
+        }
+      }}
+      tabIndex={0}
+    >
+      <SearchDataSection
+        searchValue={searchValue}
+        isLoading={isLoading}
+        pageSize={currentPageSize}
+        handleUpdateSearchValue={handleUpdateSearchValue}
+        handleSendSearchValue={handleSendSearchValue}
+        handleUpdateItemsOnPage={handleUpdateItemsOnPage}
+      />
+      <DataSection
+        data={data}
+        isLoading={isLoading}
+        handleUpdatePageNumber={handleUpdatePageNumber}
+      />
+    </div>
+  );
 }

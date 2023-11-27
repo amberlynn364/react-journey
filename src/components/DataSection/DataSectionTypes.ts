@@ -1,10 +1,8 @@
-import { Character } from '../DataCard/DataCardTypes';
+import { UpdatePageNumberTypes } from '../../hooks/usePagination/usePaginationTypes';
+import { ApiResponse } from '../../services/types';
 
 export interface DataSectionProps {
-  data: {
-    count: number;
-    next: string;
-    results: Character[];
-  } | null;
+  data: ApiResponse | null;
   isLoading: boolean;
+  handleUpdatePageNumber: (type: UpdatePageNumberTypes) => void | undefined;
 }

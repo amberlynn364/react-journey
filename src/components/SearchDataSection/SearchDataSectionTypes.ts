@@ -1,6 +1,8 @@
 export interface SearchDataProps {
   searchValue: string;
   isLoading: boolean;
-  setSearchValue: (value: string) => void;
-  sendSearchValue: () => void;
+  pageSize: string | null;
+  handleUpdateSearchValue: (value: string) => void;
+  handleSendSearchValue: () => void;
+  handleUpdateItemsOnPage: (value: string) => void;
 }
