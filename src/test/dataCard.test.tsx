@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouterProvider } from 'next-router-mock/dist/MemoryRouterProvider';
 import { PokemonCardData } from '../services/types';
 import DataCard from '../components/DataCard/DataCard';
 
@@ -23,22 +23,14 @@ const mockData: PokemonCardData[] = [
 ];
 
 test('DataCard renders the specified number of cards', () => {
-  render(
-    <MemoryRouter>
-      <DataCard data={mockData} />
-    </MemoryRouter>
-  );
+  render(<DataCard data={mockData} />, { wrapper: MemoryRouterProvider });
   const cardElements = screen.queryAllByAltText(/character/);
   expect(cardElements).toHaveLength(mockData.length);
 });
 
 test('Display an appropriate message when no cards are present', () => {
   const emptyData: PokemonCardData[] | [] = [];
-  render(
-    <MemoryRouter>
-      <DataCard data={emptyData} />
-    </MemoryRouter>
-  );
+  render(<DataCard data={emptyData} />, { wrapper: MemoryRouterProvider });
   const noCardsMessage = screen.getByText('Character with this name was not found');
   expect(noCardsMessage).toBeInTheDocument();
 });

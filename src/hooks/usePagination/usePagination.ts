@@ -1,79 +1,44 @@
-import { NavigateFunction, SetURLSearchParams } from 'react-router-dom';
-import { ApiResponse } from '../../services/types';
-import { UpdatePageNumberTypes } from './usePaginationTypes';
-import calculateTotalPages from '../../utils/calculateTotalPages';
-import { useAppDispatch } from '../../store/hooks';
-import { setItemsPerPage } from '../../store/features/itemsPerPage/itemsPerPageSlice';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { DEFAULT_PAGE_SIZE, FIRST_PAGE } from '../../constants/constants';
 
-export default function usePagination(
-  data: ApiResponse | null | undefined,
-  setSeacrhParams: SetURLSearchParams,
-  locationPathName: string,
-  navigate: NavigateFunction,
-  id: string | undefined,
-  isMenuOpen: boolean
-) {
-  const dispatch = useAppDispatch();
-  const deleteIDFromUrl = () => {
-    if (!isMenuOpen) navigate(locationPathName.replace(id || '', ''), { replace: true });
-  };
-  const handleUpdatePageNumber = (type: UpdatePageNumberTypes): void => {
-    if (!data) return;
+const usePagination = () => {
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
 
-    const currentPage = Number(data.page);
-    const currentPageSize = data.pageSize.toString();
-    const firstPage = '1';
-    const lastPage = String(calculateTotalPages(data.totalCount, data.pageSize));
+  useEffect(() => {
+    const { page } = router.query;
+    setCurrentPage(Number(page) || FIRST_PAGE);
+  }, [router.query, router.query.page]);
 
-    switch (type) {
-      case 'increment':
-        deleteIDFromUrl();
-        setSeacrhParams({
-          page: (currentPage + 1).toString(),
-          pageSize: currentPageSize,
-        });
-        break;
-      case 'decrement':
-        deleteIDFromUrl();
-        setSeacrhParams({
-          page: (currentPage - 1).toString(),
-          pageSize: currentPageSize,
-        });
-        break;
-      case 'first-page':
-        deleteIDFromUrl();
-        setSeacrhParams({
-          page: firstPage,
-          pageSize: currentPageSize,
-        });
-        break;
-      case 'last-page':
-        deleteIDFromUrl();
-        setSeacrhParams({
-          page: lastPage,
-          pageSize: currentPageSize,
-        });
-        break;
-      default:
-        break;
-    }
+  const goToPage = (page: number) => {
+    const { pageSize } = router.query;
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page, pageSize: pageSize || DEFAULT_PAGE_SIZE },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
-  const handleUpdateItemsOnPage = (value: string) => {
-    const firstPage = '1';
-    dispatch(setItemsPerPage(value));
-    if (data) {
-      deleteIDFromUrl();
-      setSeacrhParams({
-        page: firstPage,
-        pageSize: value,
-      });
+  const nextPage = () => {
+    goToPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
     }
   };
 
   return {
-    handleUpdatePageNumber,
-    handleUpdateItemsOnPage,
-    deleteIDFromUrl,
+    currentPage,
+    goToPage,
+    nextPage,
+    prevPage,
   };
-}
+};
+
+export default usePagination;
