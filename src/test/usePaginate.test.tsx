@@ -1,12 +1,9 @@
 import { NavigateFunction } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import usePagination from '../hooks/usePagination/usePagination';
 import { ApiResponse } from '../services/types';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  navigate: jest.fn(),
-}));
+import { store } from '../store/store';
 
 describe('usePagination hook', () => {
   it('should update query parameters when calling handleUpdatePageNumber', () => {
@@ -32,16 +29,12 @@ describe('usePagination hook', () => {
       totalCount: 100,
     };
 
-    const hookResult = usePagination(
-      data,
-      setSearchParamsMock,
-      locationPathName,
-      navigate,
-      id,
-      isMenuOpen
+    const { result } = renderHook(
+      () => usePagination(data, setSearchParamsMock, locationPathName, navigate, id, isMenuOpen),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
-    hookResult.handleUpdatePageNumber('increment');
+    result.current.handleUpdatePageNumber('increment');
 
     expect(setSearchParamsMock).toHaveBeenCalledWith({
       page: '2',
@@ -73,16 +66,12 @@ describe('usePagination hook', () => {
       totalCount: 100,
     };
 
-    const hookResult = usePagination(
-      data,
-      setSearchParamsMock,
-      locationPathName,
-      navigate,
-      id,
-      isMenuOpen
+    const { result } = renderHook(
+      () => usePagination(data, setSearchParamsMock, locationPathName, navigate, id, isMenuOpen),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
-    hookResult.handleUpdatePageNumber('first-page');
+    result.current.handleUpdatePageNumber('first-page');
 
     expect(setSearchParamsMock).toHaveBeenCalledWith({
       page: '1',
@@ -98,16 +87,12 @@ describe('usePagination hook', () => {
     const navigate: NavigateFunction = setSearchParamsMock;
     const data: ApiResponse | null = null;
 
-    const hookResult = usePagination(
-      data,
-      setSearchParamsMock,
-      locationPathName,
-      navigate,
-      id,
-      isMenuOpen
+    const { result } = renderHook(
+      () => usePagination(data, setSearchParamsMock, locationPathName, navigate, id, isMenuOpen),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
-    hookResult.handleUpdatePageNumber('increment');
+    result.current.handleUpdatePageNumber('increment');
 
     expect(navigate).not.toHaveBeenCalled();
   });
@@ -116,15 +101,17 @@ describe('usePagination hook', () => {
     const mockNavigate = jest.fn();
     const mockSetSearchParams = jest.fn();
 
-    const { result } = renderHook(() =>
-      usePagination(
-        { count: 50, page: 1, pageSize: 10, totalCount: 100, data: [] },
-        mockSetSearchParams,
-        '/example-path',
-        mockNavigate,
-        'someId',
-        false
-      )
+    const { result } = renderHook(
+      () =>
+        usePagination(
+          { count: 50, page: 1, pageSize: 10, totalCount: 100, data: [] },
+          mockSetSearchParams,
+          '/example-path',
+          mockNavigate,
+          'someId',
+          false
+        ),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
     result.current.deleteIDFromUrl();
@@ -136,15 +123,17 @@ describe('usePagination hook', () => {
     const mockNavigate = jest.fn();
     const mockSetSearchParams = jest.fn();
 
-    const { result } = renderHook(() =>
-      usePagination(
-        { count: 50, page: 2, pageSize: 10, totalCount: 100, data: [] },
-        mockSetSearchParams,
-        '/example-path',
-        mockNavigate,
-        'someId',
-        false
-      )
+    const { result } = renderHook(
+      () =>
+        usePagination(
+          { count: 50, page: 2, pageSize: 10, totalCount: 100, data: [] },
+          mockSetSearchParams,
+          '/example-path',
+          mockNavigate,
+          'someId',
+          false
+        ),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
     result.current.handleUpdatePageNumber('decrement');
@@ -160,15 +149,17 @@ describe('usePagination hook', () => {
     const mockNavigate = jest.fn();
     const mockSetSearchParams = jest.fn();
 
-    const { result } = renderHook(() =>
-      usePagination(
-        { count: 50, page: 2, pageSize: 10, totalCount: 100, data: [] },
-        mockSetSearchParams,
-        '/example-path',
-        mockNavigate,
-        'someId',
-        false
-      )
+    const { result } = renderHook(
+      () =>
+        usePagination(
+          { count: 50, page: 2, pageSize: 10, totalCount: 100, data: [] },
+          mockSetSearchParams,
+          '/example-path',
+          mockNavigate,
+          'someId',
+          false
+        ),
+      { wrapper: ({ children }) => <Provider store={store}>{children}</Provider> }
     );
 
     result.current.handleUpdatePageNumber('last-page');

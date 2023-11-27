@@ -2,15 +2,18 @@ import { NavigateFunction, SetURLSearchParams } from 'react-router-dom';
 import { ApiResponse } from '../../services/types';
 import { UpdatePageNumberTypes } from './usePaginationTypes';
 import calculateTotalPages from '../../utils/calculateTotalPages';
+import { useAppDispatch } from '../../store/hooks';
+import { setItemsPerPage } from '../../store/features/itemsPerPage/itemsPerPageSlice';
 
 export default function usePagination(
-  data: ApiResponse | null,
+  data: ApiResponse | null | undefined,
   setSeacrhParams: SetURLSearchParams,
   locationPathName: string,
   navigate: NavigateFunction,
   id: string | undefined,
   isMenuOpen: boolean
 ) {
+  const dispatch = useAppDispatch();
   const deleteIDFromUrl = () => {
     if (!isMenuOpen) navigate(locationPathName.replace(id || '', ''), { replace: true });
   };
@@ -58,6 +61,7 @@ export default function usePagination(
 
   const handleUpdateItemsOnPage = (value: string) => {
     const firstPage = '1';
+    dispatch(setItemsPerPage(value));
     if (data) {
       deleteIDFromUrl();
       setSeacrhParams({

@@ -1,12 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
 import { act } from 'react-dom/test-utils';
-import App from '../App';
+import { Provider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
 import router from '../router/router';
+import { store } from '../store/store';
 
 test('landing on a bad page', async () => {
-  fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
   expect(screen.queryByText(/Whoops/i)).toBeNull();
   act(() => {
     router.navigate('/some/bad/route');

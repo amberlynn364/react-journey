@@ -1,17 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import fetchMock from 'jest-fetch-mock';
-import Home from '../pages/Home/Home';
-import { AppContextProvider } from '../MyContext/MyContext';
+import { RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import localStorageSerive from '../utils/localStorageService';
+import { store } from '../store/store';
+import router from '../router/router';
 
 test('handleSendSearchValue sets searchValue in localStorage', async () => {
-  fetchMock.mockResponse(JSON.stringify({ data: 'mock data' }));
   render(
-    <AppContextProvider>
-      <Home />
-    </AppContextProvider>,
-    { wrapper: BrowserRouter }
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 
   fireEvent.change(screen.getByLabelText('Enter character name'), { target: { value: 'test' } });

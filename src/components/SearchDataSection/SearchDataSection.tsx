@@ -3,15 +3,24 @@ import SearchBar from '../View/SearchBar/SearchBar';
 import Button from '../View/Button/Button';
 import { SearchDataProps } from './SearchDataSectionTypes';
 import Dropdown from '../View/Dropdown/Dropdown';
-import { useAppContext } from '../../MyContext/MyContext';
-import { IAppContext } from '../../MyContext/MyContextTypes';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import selectSearchValue from '../../store/features/searchValue/searchValueSelector';
+import { setSearchValue } from '../../store/features/searchValue/searchValueSlice';
+import selectMainPageLoading from '../../store/features/mainPageLoading/mainPageLoadingSelector';
 
 export default function SearchData({
   pageSize,
   handleSendSearchValue,
   handleUpdateItemsOnPage,
 }: SearchDataProps) {
-  const { searchValue, handleUpdateSearchValue, isLoading } = useAppContext() as IAppContext;
+  const dispatch = useAppDispatch();
+  const searchValue = useAppSelector(selectSearchValue);
+  const isLoading = useAppSelector(selectMainPageLoading);
+
+  const handleUpdateSearchValue = (newValue: string) => {
+    dispatch(setSearchValue(newValue));
+  };
+
   return (
     <section className={styles['search-section']}>
       <SearchBar

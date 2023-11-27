@@ -1,12 +1,18 @@
-import { useAppContext } from '../../../MyContext/MyContext';
-import { IAppContext } from '../../../MyContext/MyContextTypes';
 import Button from '../../../components/View/Button/Button';
+import { setIsOpenSideMenu } from '../../../store/features/openSideMenu/openSideMenuSlice';
+import { useAppDispatch } from '../../../store/hooks';
 import { LoadedData } from '../SideCardDetailsTypes';
 import styles from './SideCardDescription.module.scss';
 
 export default function SideCardDescription({ data }: { data: LoadedData | undefined }) {
+  const dispatch = useAppDispatch();
   const { name, hp, rarity, types: [firstType] = [], flavorText } = data?.data || {};
-  const { handleCloseSideMenu } = useAppContext() as IAppContext;
+  const handleCloseSideMenu = () => {
+    const currentURL = new URL(window.location.href);
+    currentURL.pathname = '';
+    window.history.pushState(null, '', currentURL.toString());
+    dispatch(setIsOpenSideMenu(false));
+  };
   if (!data) return <Button onClick={handleCloseSideMenu}>close menu</Button>;
   return (
     <div className={styles.stickyContainer}>

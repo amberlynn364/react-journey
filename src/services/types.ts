@@ -14,3 +14,7 @@ export interface PokemonCardData {
     small: string;
   };
 }
+
+export enum ApiUrls {
+  DefaultUrl = 'https://api.pokemontcg.io/v2/cards/',
+}

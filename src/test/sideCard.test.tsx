@@ -1,9 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import SideCardDescription from '../pages/SideCardDetails/SideCardDescription/SideCardDescription';
-import { AppContextProvider, useAppContext } from '../MyContext/MyContext';
-import { IAppContext } from '../MyContext/MyContextTypes';
+import { store } from '../store/store';
 
 test('renders SideCardDescription component with correct data', async () => {
   const mockData = {
@@ -17,11 +16,10 @@ test('renders SideCardDescription component with correct data', async () => {
   };
 
   render(
-    <AppContextProvider>
-      <MemoryRouter>
-        <SideCardDescription data={mockData} />
-      </MemoryRouter>
-    </AppContextProvider>
+    <Provider store={store}>
+      <SideCardDescription data={mockData} />
+    </Provider>,
+    { wrapper: MemoryRouter }
   );
 
   expect(screen.getByText('Name:')).toHaveTextContent('Card Name');
@@ -31,45 +29,12 @@ test('renders SideCardDescription component with correct data', async () => {
   expect(screen.getByText('Description:')).toHaveTextContent('Lorem ipsum dolor sit amet');
 });
 
-function ComponentForTestingHideComponentButton() {
-  const { isMenuOpen, handleCloseSideMenu } = useAppContext() as IAppContext;
-
-  return (
-    <div>
-      <p>{isMenuOpen ? 'Menu is open' : 'Menu is closed'}</p>
-      <button type="submit" onClick={handleCloseSideMenu}>
-        Close Menu
-      </button>
-    </div>
-  );
-}
-
-test('SideCardDescription closes the menu', async () => {
-  render(
-    <AppContextProvider>
-      <MemoryRouter>
-        <ComponentForTestingHideComponentButton />
-      </MemoryRouter>
-    </AppContextProvider>
-  );
-
-  const closeButton = screen.getByText('Close Menu');
-  expect(closeButton).toBeInTheDocument();
-
-  await userEvent.click(closeButton);
-
-  await waitFor(() => {
-    expect(screen.getByText('Menu is closed')).toBeInTheDocument();
-  });
-});
-
 test('renders correctly when data is undefined', () => {
   const { container } = render(
-    <AppContextProvider>
-      <MemoryRouter>
-        <SideCardDescription data={undefined} />
-      </MemoryRouter>
-    </AppContextProvider>
+    <Provider store={store}>
+      <SideCardDescription data={undefined} />
+    </Provider>,
+    { wrapper: MemoryRouter }
   );
   expect(container.textContent).toBe('close menu');
 });
