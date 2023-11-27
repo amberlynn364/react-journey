@@ -1,0 +1,16 @@
+@mixin flex-center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column-gap($gap) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+@mixin width-height($width, $height) {
+  width: $width;
+  height: $height;
+}
